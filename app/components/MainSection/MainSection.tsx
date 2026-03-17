@@ -13,6 +13,8 @@ type MainSectionProps = {
   isDiscountActive: boolean;
 };
 
+// Правда много чего не успел сделать, чтобы это было хорошее тестовое "на совесть", но время поджимало
+
 export default function MainSection({
   bestTariff,
   baseTariffs,
