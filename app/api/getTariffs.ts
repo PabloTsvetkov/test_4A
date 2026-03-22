@@ -11,6 +11,7 @@ export type TariffDto = {
 
 export type Tariff = {
   id: string;
+  clientId: string; // потому что с бека приходят два тарифа с одинаковым айдишником
   period: string;
   price: number;
   fullPrice: number;
@@ -21,6 +22,7 @@ export type Tariff = {
 const MOCK_TARIFFS: Tariff[] = [
   {
     id: "mock-1",
+    clientId: "mock-1",
     period: "Навсегда",
     price: 5990,
     fullPrice: 18990,
@@ -29,6 +31,7 @@ const MOCK_TARIFFS: Tariff[] = [
   },
   {
     id: "mock-2",
+    clientId: "mock-2",
     period: "3 месяца",
     price: 1990,
     fullPrice: 3990,
@@ -37,6 +40,7 @@ const MOCK_TARIFFS: Tariff[] = [
   },
   {
     id: "mock-3",
+    clientId: "mock-3",
     period: "1 месяц",
     price: 990,
     fullPrice: 1990,
@@ -45,6 +49,7 @@ const MOCK_TARIFFS: Tariff[] = [
   },
   {
     id: "mock-4",
+    clientId: "mock-4",
     period: "6 месяцев",
     price: 2990,
     fullPrice: 5990,
@@ -73,9 +78,10 @@ function isTariffDtoArray(data: unknown): data is TariffDto[] {
   );
 }
 
-function mapTariff(dto: TariffDto): Tariff {
+function mapTariff(dto: TariffDto, index: number): Tariff {
   return {
     id: dto.id,
+    clientId: `${dto.id}-${index}`,
     period: dto.period,
     price: dto.price,
     fullPrice: dto.full_price,
@@ -101,7 +107,7 @@ export async function getTariffs(): Promise<Tariff[]> {
       return MOCK_TARIFFS;
     }
 
-    const tariffs = data.map(mapTariff);
+    const tariffs = data.map((item, index) => mapTariff(item, index));
 
     if (!tariffs.length) {
       return MOCK_TARIFFS;

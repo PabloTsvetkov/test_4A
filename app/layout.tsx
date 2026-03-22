@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} antialiased overflow-y-auto hide-scrollbar`}
+        className={`${montserrat.className} antialiased overflow-y-auto overflow-x-hidden`}
       >
         {children}
       </body>

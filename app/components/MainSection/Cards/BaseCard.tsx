@@ -1,9 +1,12 @@
 type BaseCardProps = {
+  id: string;
   period: string;
   price: number;
   fullPrice: number;
   text: string;
   isDiscountActive: boolean;
+  selected: boolean;
+  onSelect: (id: string) => void;
 };
 
 function calculateDiscount(price: number, fullPrice: number) {
@@ -12,68 +15,76 @@ function calculateDiscount(price: number, fullPrice: number) {
 }
 
 export default function BaseCard({
+  id,
   period,
   price,
   fullPrice,
   text,
   isDiscountActive,
+  selected,
+  onSelect,
 }: BaseCardProps) {
   const discount = calculateDiscount(price, fullPrice);
 
   return (
-    <div
-      className="
-        relative mb-[14px] flex w-[288px] min-[375px]:w-[343px]
+    <button
+      type="button"
+      onClick={() => onSelect(id)}
+      aria-pressed={selected}
+      className={`
+        relative flex w-[288px] m:w-[343px]
         items-center justify-between rounded-[34px] border-2 bg-[#313637]
-        pt-[30px] pr-[19px] pb-[26px] pl-[19px] text-left transition-all
+        pt-[30px] pr-[19px] pb-[26px] pl-[19px] text-left cursor-pointer
+        transition-all duration-300 ease-out
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FDB056] focus-visible:ring-offset-2 focus-visible:ring-offset-[#232829]
+        active:scale-[0.99]
 
-        min-[1216px]:mb-0
-        min-[1216px]:h-[335px] min-[1216px]:w-[240px]
-        min-[1216px]:flex-col min-[1216px]:items-center min-[1216px]:justify-start
-        min-[1216px]:gap-4 min-[1216px]:rounded-[40px]
-        min-[1216px]:pt-[70px] min-[1216px]:pr-[21px] min-[1216px]:pl-[21px]
-      "
+        l:mb-0
+        l:h-[335px] l:w-[240px]
+        l:flex-col l:items-center l:justify-start
+        l:gap-4 l:rounded-[40px]
+        l:pt-[70px] l:pr-[21px] l:pl-[21px]
+
+        ${
+          selected
+            ? "border-[#FDB056] bg-[#393F40] shadow-[0_0_0_1px_rgba(253,176,86,0.28),0_18px_40px_rgba(253,176,86,0.18)] ring-2 ring-[#FDB056]/25 ring-offset-2 ring-offset-[#232829]"
+            : "border-[#484D4E] hover:border-[#6A7071] hover:-translate-y-[2px]"
+        }
+      `}
     >
       <div
-        className={`
-          absolute top-0 right-[70px] flex items-center justify-center
-          rounded-b-[10px] rounded-t-none bg-[#FD5656] p-2
-          h-[23px] w-[30px] min-[375px]:h-[27px] min-[375px]:w-[40px]
-          transition-opacity duration-300
-          min-[1216px]:top-[-2px] min-[1216px]:left-[51px] min-[1216px]:right-auto
-          min-[1216px]:h-[39px] min-[1216px]:w-[69px] min-[1216px]:rounded-b-[8px]
-          min-[1216px]:px-2 min-[1216px]:py-[5px]
-          ${isDiscountActive ? "opacity-100" : "opacity-0"}
-        `}
+        className={`absolute top-0 l:left-[50px] right-[70px] flex l:h-[39px] l:w-[66px] m:h-[27px] m:w-[48px] h-[23px] w-[42px] m:text-[16px] text-[13px] items-center justify-center rounded-b-[10px] rounded-t-none bg-[#FD5656] p-2 transition-opacity duration-300 ${
+          isDiscountActive ? "opacity-100" : "opacity-0"
+        }`}
       >
-        <span className="text-left text-[13px] min-[375px]:text-[16px] min-[1216px]:text-[22px] font-medium leading-[130%] text-white">
+        <span className="text-left text-[13px] m:text-[16px] l:text-[22px] font-medium leading-[130%] text-white">
           -{discount}%
         </span>
       </div>
 
       <div
         className="
-          mx-auto flex h-[126px] w-full max-w-[546px] items-center justify-center gap-[40px]
-          min-[1216px]:h-auto min-[1216px]:w-full min-[1216px]:max-w-none
-          min-[1216px]:flex-col min-[1216px]:gap-0
+          mx-auto flex h-[126px] w-full max-w-[546px] items-center justify-center l:gap-[40px] gap-[30px]
+          l:h-auto l:w-full l:max-w-none
+          l:flex-col l:gap-0
         "
       >
         <div
           className="
             flex min-w-[110px] flex-col items-start
-            min-[1216px]:w-[180px] min-[1216px]:items-center
+            l:w-[180px] m:w-[150px] m:min-w-[130px] l:items-center w-fit
           "
         >
-          <span className="w-full text-center text-[16px] min-[375px]:text-[18px] min-[1216px]:h-[31px] min-[1216px]:text-[26px] font-medium leading-[120%] text-white">
+          <span className="w-full text-center text-[16px] m:text-[18px] l:h-[31px] l:text-[26px] font-medium leading-[120%] text-white">
             {period}
           </span>
 
-          <span className="mt-4 w-full text-right text-[30px] min-[375px]:text-[34px] min-[1216px]:mt-0 min-[1216px]:h-[50px] min-[1216px]:text-center min-[1216px]:text-[50px] font-semibold leading-[100%] text-white transition-all">
+          <span className="mt-4 w-fit text-right text-[30px] m:text-[34px] l:mt-0 l:h-[50px] l:text-center l:text-[50px] font-semibold leading-[100%] text-white transition-all ml-auto">
             {isDiscountActive ? price : fullPrice} ₽
           </span>
 
           <span
-            className={`w-full text-right text-[14px] min-[375px]:text-[16px] min-[1216px]:h-[29px] min-[1216px]:w-[180px] min-[1216px]:text-right min-[1216px]:text-[24px] font-normal leading-[120%] text-[#919191] line-through transition-opacity duration-300 ${
+            className={`w-full text-right text-[14px] m:text-[16px] l:h-[29px] l:w-[180px] l:text-right l:text-[24px] font-normal leading-[120%] text-[#919191] line-through transition-opacity duration-300 ${
               isDiscountActive ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -81,10 +92,10 @@ export default function BaseCard({
           </span>
         </div>
 
-        <p className="w-[328px] text-left text-[14px] min-[1216px]:mt-auto min-[1216px]:h-[42px] min-[1216px]:w-[204px] min-[1216px]:text-[16px] font-normal leading-[130%] text-white">
+        <p className="w-[328px] text-left text-[14px] l:mt-auto l:h-[42px] l:w-[204px] l:text-[16px] font-normal leading-[130%] text-white">
           {text}
         </p>
       </div>
-    </div>
+    </button>
   );
 }
